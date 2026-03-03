@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something Special for Madam Ji 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffdab9 50%, #e6e6fa 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Floating Hearts & Sparkles */
+        .heart-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+        .heart { position: absolute; font-size: 20px; animation: floatUp 8s infinite ease-in; opacity: 0.6; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0.6; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+
+        /* Music Toggle Button */
+        .music-toggle { position: fixed; bottom: 20px; right: 20px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 28px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4); z-index: 1000; transition: transform 0.3s ease; }
+        .music-toggle:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6); }
+
+        /* Screens */
+        .screen { display: none; min-height: 100vh; justify-content: center; align-items: center; flex-direction: column; padding: 20px; position: relative; z-index: 2; animation: fadeIn 0.8s ease; }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Frosted Glass Content Box */
+        .content-box { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 30px; padding: 40px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(255, 105, 180, 0.15); border: 2px solid rgba(255, 255, 255, 1); position: relative; z-index: 10; }
+
+        h1 { font-family: 'Caveat', cursive; font-size: 3rem; color: #ff69b4; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2); line-height: 1.2; }
+        h2 { font-family: 'Caveat', cursive; font-size: 2rem; color: #ff69b4; margin-bottom: 15px; }
+        p { font-size: 1.2rem; color: #666; margin-bottom: 25px; line-height: 1.6; font-weight: 600; }
+
+        .sticker-img { width: 220px; height: 220px; margin: 15px auto 25px; display: block; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1)); border-radius: 20px; }
+
+        /* Buttons */
+        .btn { background: linear-gradient(135deg, #ff69b4, #ff1493); color: white; border: none; border-radius: 50px; padding: 15px 40px; font-size: 1.2rem; font-family: 'Quicksand', sans-serif; font-weight: 700; cursor: pointer; box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3); transition: all 0.3s ease; margin: 10px; position: relative; z-index: 50; }
+        .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
+        .btn-no { background: linear-gradient(135deg, #ddd, #aaa); color: #555; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* Slider */
+        .minigame-container { width: 100%; margin: 20px 0; }
+        input[type="range"] { width: 100%; height: 12px; border-radius: 6px; background: linear-gradient(to right, #ffd1dc, #ff69b4); outline: none; -webkit-appearance: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 30px; height: 30px; border-radius: 50%; background: #ff1493; cursor: pointer; box-shadow: 0 2px 10px rgba(255, 20, 147, 0.5); border: 3px solid white; }
+        #sliderValue { font-size: 2.2rem; color: #ff69b4; font-weight: 800; margin: 15px 0; }
+        #sliderText { font-size: 1.1rem; color: #d87093; min-height: 25px; font-weight: 700; }
+
+        /* Fingerprint Scanner */
+        .fingerprint-wrapper { position: relative; width: 120px; height: 120px; margin: 20px auto; border-radius: 50%; border: 4px dashed #ffb6c1; display: flex; justify-content: center; align-items: center; user-select: none; -webkit-user-select: none; touch-action: none; cursor: pointer; overflow: hidden; background: rgba(255,255,255,0.5); box-shadow: inset 0 0 20px rgba(255,182,193,0.3); }
+        .fingerprint-icon { font-size: 50px; z-index: 2; pointer-events: none; animation: pulse 2s infinite; }
+        .heart-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: rgba(255, 105, 180, 0.6); z-index: 1; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* 🔥 FIXED: 3D Envelope Animation */
+        .envelope-container { position: relative; width: 280px; height: 180px; margin: 40px auto 20px; cursor: pointer; perspective: 1000px; z-index: 20; animation: gentlePulse 2s infinite; }
+        .envelope-container.open { animation: none; cursor: default; }
+        
+        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .env-back { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: #ff8da1; border-radius: 10px; z-index: 1; box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
+        
+        .env-letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 150px; background: white; z-index: 2; border-radius: 8px; padding: 20px; text-align: center; display: flex; align-items: center; justify-content: center; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s; box-shadow: 0 0 15px rgba(0,0,0,0.15); }
+        
+        .env-letter-text { font-family: 'Caveat', cursive; font-size: 1.8rem; color: #ff1493; line-height: 1.3; }
+
+        /* Front pocket stays AT Z-INDEX 3 so the letter stays inside it */
+        .env-front { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 140px solid #ffb6c1; border-right: 140px solid #ffb6c1; border-bottom: 110px solid #ff69b4; border-top: 70px solid transparent; z-index: 3; border-radius: 0 0 10px 10px; pointer-events: none; }
+        
+        .env-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 100px solid #ff1493; z-index: 4; transform-origin: top; transition: transform 0.6s ease; pointer-events: none; }
+        
+        /* Opening Animations */
+        .envelope-container.open .env-flap { transform: rotateX(180deg); z-index: 0; }
+        .envelope-container.open .env-letter { transform: translateY(-90px); } /* Slides up but stays behind front pocket */
+
+        /* Calendar Styles */
+        .calendar-screen { padding: 40px 20px; min-height: 100vh; }
+        .calendar-header { text-align: center; margin-bottom: 30px; }
+        .countdown { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 20px; margin: 20px auto; max-width: 400px; box-shadow: 0 5px 20px rgba(255, 105, 180, 0.2); border: 2px solid rgba(255, 182, 193, 0.4); }
+        .countdown-text { font-size: 1.5rem; color: #ff69b4; font-weight: 700; }
+        .days-grid { display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto; width: 100%; padding-bottom: 50px; }
+
+        .day-card { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 20px 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); display: flex; justify-content: space-between; align-items: center; border: 2px solid transparent; scroll-margin-top: 20px; }
+        .day-card:hover:not(.locked) { transform: translateX(10px) scale(1.02); box-shadow: 0 8px 25px rgba(255, 105, 180, 0.3); border: 2px solid #ffb6c1; }
+        .day-card.locked { opacity: 0.6; cursor: not-allowed; background: rgba(255, 255, 255, 0.5); border: 2px dashed #ccc; }
+        
+        .finale-card { background: linear-gradient(135deg, #ff1493, #ff69b4) !important; color: white !important; box-shadow: 0 0 20px rgba(255, 20, 147, 0.6) !important; animation: heartbeat 2s infinite; border: 2px solid white !important; }
+        .finale-card .day-date, .finale-card .day-subtitle { color: white !important; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255, 20, 147, 0.8) !important; } 100% { transform: scale(1); } }
+
+        .day-info { text-align: left; flex: 1; }
+        .day-date { font-size: 1.8rem; font-weight: 700; color: #ff69b4; font-family: 'Caveat', cursive; margin-bottom: 5px; }
+        .day-subtitle { font-size: 1rem; color: #888; font-style: italic; font-weight: 600; }
+        .day-icon { font-size: 2.2rem; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 2000; animation: fadeIn 0.3s ease; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 30px; padding: 40px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto; text-align: center; box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3); border: 3px solid #ffe4e1; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #bbb; border: none; background: none; z-index: 10; transition: color 0.3s; }
+        .close-btn:hover { color: #ff69b4; }
+        
+        .options-container { display: flex; flex-direction: column; gap: 12px; margin: 25px 0; }
+        .option-btn { background: #fff0f5; border: 2px solid #ffb6c1; border-radius: 15px; padding: 15px 20px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; color: #5a4b50; font-family: 'Quicksand', sans-serif; font-weight: 700; }
+        .option-btn:hover { background: #ff69b4; color: white; border-color: #ff69b4; transform: scale(1.02); }
+        .feedback { margin-top: 15px; font-size: 1.2rem; font-weight: 700; min-height: 30px; }
+        .feedback.correct { color: #28a745; }
+        .feedback.wrong { color: #ff1493; }
+
+        .qr-image { width: 220px; height: 220px; margin: 20px auto; display: flex; justify-content: center; align-items: center; background: #fdfdfd; border-radius: 15px; border: 3px dashed #ffb6c1; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); color: #888; font-weight: bold; }
+
+        .finale-modal .modal-content { background: linear-gradient(135deg, #ff69b4, #ff1493); color: white; border: none; }
+        .finale-modal h2 { color: white; font-size: 3rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+        .finale-modal p { color: white; font-size: 1.5rem; background: rgba(0,0,0,0.2); padding: 10px 20px; border-radius: 15px; display: inline-block; }
+
+        @media (max-width: 768px) { h1 { font-size: 2.5rem; } h2 { font-size: 1.8rem; } .content-box { padding: 30px 20px; } .day-date { font-size: 1.4rem; } .sticker-img { width: 180px; height: 180px; } }
+    </style>
+</head>
+<body>
+
+    <div class="heart-container" id="heartContainer"></div>
+
+    <button class="music-toggle" id="musicToggle" title="Play/Pause Music">🎵</button>
+    <audio id="bgMusic" loop>
+        <source src="romantic-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="screen active" id="screen1">
+        <div class="content-box">
+            <h1>Something for You My gurlll 🌸</h1>
+            <p>Are you ready for a little surprise?</p>
+            <img src="9.gif.webp" alt="Cute Sticker" class="sticker-img">
+            <button class="btn" onclick="goToScreen(2)">Let's Go! 💌</button>
+        </div>
+    </div>
+
+    <div class="screen" id="screen2">
+        <div class="content-box">
+            <h1>I made something special for you...</h1>
+            <p>Do you wanna see it?</p>
+            <img src="12.gif.webp" alt="Cute Sticker" class="sticker-img">
+            <div style="position: relative; height: 80px; display: flex; justify-content: center; gap: 20px; align-items: center;">
+                <button class="btn" onclick="goToScreen(3)" style="z-index: 5;">YES 😍</button>
+                <button class="btn btn-no" id="btnNo" onmouseover="runAwayButton()" onclick="runAwayButton()" style="position: absolute; left: 55%; z-index: 5;">NO 😒</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="screen3">
+        <div class="content-box">
+            <h1>One quick question... 💕</h1>
+            <p>How much do you love me?</p>
+            <img src="13.gif.webp" alt="Cute Sticker" class="sticker-img" style="height: 180px;">
+            
+            <div class="minigame-container">
+                <input type="range" min="0" max="100" value="0" id="loveSlider">
+                <div id="sliderValue">0%</div>
+                <div id="sliderText">Move the slider! 💕</div>
+            </div>
+            <button class="btn" id="btnNext" style="display: none;" onclick="goToScreen(4)">Next ✨</button>
+        </div>
+    </div>
+
+    <div class="screen" id="screen4">
+        <div class="content-box">
+            <h1>Make a Promise 🤞</h1>
+            <p id="promiseText">Press and hold the scanner for 3 seconds to seal our journey...</p>
+            
+            <div class="fingerprint-wrapper" id="fpWrapper">
+                <div class="heart-fill" id="heartFill"></div>
+                <div class="fingerprint-icon">👆</div>
+            </div>
+
+            <img src="14..webp" alt="Cute Sticker" class="sticker-img" style="height: 150px; margin-top: 10px;">
+        </div>
+    </div>
+
+    <div class="screen" id="screen5">
+        <div class="content-box">
+            <h1>You're amazing! 🎉</h1>
+            <p>Tap the magic envelope to unlock your real surprise...</p>
+            
+            <div class="envelope-container" id="envContainer" onclick="openEnvelope()">
+                <div class="env-back"></div>
+                <div class="env-letter">
+                    <div class="env-letter-text">Your 31 Days of<br>Love Journey Begins... 💖</div>
+                </div>
+                <div class="env-front"></div>
+                <div class="env-flap"></div>
+            </div>
+
+            <button class="btn" id="envNextBtn" style="display: none; margin-top: 30px;" onclick="goToCalendar()">Open Calendar 🗓️</button>
+            <img src="3.gif.webp" alt="Cute Sticker" class="sticker-img" style="height: 120px; display: none; margin-top: 20px;" id="envSticker">
+        </div>
+    </div>
+
+    <div class="screen calendar-screen" id="screen6">
+        <img src="7.gif.webp" alt="Cute Sticker" style="width: 130px; border-radius: 20px; margin: 0 auto 10px; display: block;">
+        <div class="calendar-header">
+            <h1 onclick="adminOverride()">Specially For You 🌸</h1>
+            <div class="countdown">
+                <div class="countdown-text" id="masterCountdown">Loading...</div>
+            </div>
+        </div>
+        <div class="days-grid" id="daysGrid"></div>
+    </div>
+
+    <div class="modal" id="mcqModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="document.getElementById('mcqModal').classList.remove('active')">×</button>
+            <img src="9.gif.webp" alt="Question Sticker" style="width: 140px; border-radius: 15px; margin: 0 auto 15px; display: block;">
+            <h2 id="mcqQuestion" style="font-family: 'Caveat', cursive; color: #ff69b4; font-size: 2.2rem;">Question?</h2>
+            <div class="options-container" id="optionsContainer"></div>
+            <div class="feedback" id="mcqFeedback"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeQRModal()">×</button>
+            <h2 style="font-family: 'Caveat', cursive; color: #ff69b4; font-size: 2.5rem;">Scan Me! 💌</h2>
+            <p style="color: #666; font-size: 1.1rem; font-weight: 600;">Scan this to see today's special surprise...</p>
+            <div class="qr-image" id="qrImage">[QR Code Goes Here]</div>
+            <button class="btn" onclick="closeQRModal()" style="width: 100%;">Close 💖</button>
+        </div>
+    </div>
+
+    <div class="modal finale-modal" id="finaleModal">
+        <div class="modal-content" style="box-shadow: none;">
+            <button class="close-btn" onclick="closeFinaleModal()" style="color: white;">×</button>
+            <img src="7.gif.webp" alt="Final Surprise" style="width: 250px; border-radius: 20px; margin: 0 auto 20px; display: block;">
+            <h2>The Final Surprise! ✨🎉</h2>
+            <p>I love you to the moon and back!</p>
+            <div class="qr-image" style="margin-top: 20px; background: white; color: #ff69b4; border: 4px dashed #ff1493;">
+                [FINAL BIG QR]
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Floating Hearts
+        function createHearts() {
+            const container = document.getElementById('heartContainer');
+            const hearts = ['💕', '💖', '💗', '🤍', '🌸', '✨'];
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // Music
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+        musicToggle.addEventListener('click', () => {
+            const music = document.getElementById('bgMusic');
+            if (isPlaying) { music.pause(); musicToggle.textContent = '🎵'; } 
+            else { music.play().catch(e => console.log('Audio playback requires interaction', e)); musicToggle.textContent = '⏸️'; }
+            isPlaying = !isPlaying;
+        });
+
+        // Navigation
+        function goToScreen(num) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + num).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Screen 2
+        function runAwayButton() {
+            const btn = document.getElementById('btnNo');
+            const randomX = Math.random() * 120 - 60;
+            const randomY = Math.random() * 120 - 60;
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        // Screen 3
+        const slider = document.getElementById('loveSlider');
+        const sliderValue = document.getElementById('sliderValue');
+        const sliderText = document.getElementById('sliderText');
+        const btnNext = document.getElementById('btnNext');
+
+        slider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            sliderValue.textContent = val + '%';
+            if (val < 30) sliderText.textContent = "Aww, is that all? 🥺";
+            else if (val < 60) sliderText.textContent = "Getting there... Keep going! 💕";
+            else if (val < 90) sliderText.textContent = "Much better! Almost there! 💖";
+            else if (val < 100) sliderText.textContent = "So close! Just a bit more! 💗";
+            else { sliderText.textContent = "Infinity & Beyond! 🚀"; btnNext.style.display = 'inline-block'; }
+        });
+
+        // ==========================================
+        // 🔥 FIXED SCREEN 4: Fingerprint Logic
+        // ==========================================
+        let holdTimeout;
+        let isPromiseAccepted = false; 
+        const fpWrapper = document.getElementById('fpWrapper');
+        const heartFill = document.getElementById('heartFill');
+        const promiseText = document.getElementById('promiseText');
+
+        fpWrapper.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        function startHold(e) {
+            if(e.cancelable) e.preventDefault();
+            if(isPromiseAccepted) return;
+
+            heartFill.style.transition = 'height 3s linear';
+            heartFill.style.height = '100%';
+            promiseText.textContent = "Keep holding... ❤️";
+            promiseText.style.color = "#ff1493";
+            
+            holdTimeout = setTimeout(() => {
+                isPromiseAccepted = true; 
+                promiseText.textContent = "Promise Accepted! 🤞💖";
+                fpWrapper.style.pointerEvents = "none"; 
+                setTimeout(() => { goToScreen(5); }, 1200);
+            }, 3000);
+        }
+
+        function endHold(e) {
+            if(e.cancelable) e.preventDefault();
+            if(isPromiseAccepted) return; 
+
+            clearTimeout(holdTimeout); 
+            heartFill.style.transition = 'height 0.3s ease';
+            heartFill.style.height = '0%';
+            promiseText.textContent = "Press and hold the scanner for 3 seconds to seal our journey...";
+            promiseText.style.color = "#666";
+        }
+        
+        fpWrapper.addEventListener('mousedown', startHold);
+        fpWrapper.addEventListener('mouseup', endHold);
+        fpWrapper.addEventListener('mouseleave', endHold);
+        fpWrapper.addEventListener('touchstart', startHold, {passive: false});
+        fpWrapper.addEventListener('touchend', endHold);
+        fpWrapper.addEventListener('touchcancel', endHold); 
+
+        // ==========================================
+        // 🔥 FIXED SCREEN 5: 3D Envelope Logic
+        // ==========================================
+        let isEnvelopeOpen = false;
+        function openEnvelope() {
+            if(isEnvelopeOpen) return; // Sirf ek baar click hoga
+            isEnvelopeOpen = true;
+
+            const env = document.getElementById('envContainer');
+            env.classList.add('open');
+            
+            setTimeout(() => {
+                document.getElementById('envNextBtn').style.display = 'inline-block';
+                document.getElementById('envSticker').style.display = 'block';
+            }, 1200); // Animation ke pura hone ke baad button aayega
+        }
+
+        function goToCalendar() {
+            goToScreen(6);
+            setTimeout(() => {
+                const unlockedCards = document.querySelectorAll('.day-card:not(.locked)');
+                if(unlockedCards.length > 0) {
+                    unlockedCards[unlockedCards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 600);
+        }
+
+        // Calendar & Dates
+        const START_DATE = new Date('2026-03-13T00:00:00');
+        const END_DATE = new Date('2026-04-13T00:00:00');
+        let adminMode = false;
+
+        const phrases = [
+            "days to the magic ✨", "days to our special occasion 💖", "days of waiting 🎀",
+            "days left for the big day 🌸", "days to go cutie 🐻‍❄️", "days until the grand surprise 💌",
+            "days closer to you 🥰", "days to the ultimate smile 😊", "days of love remaining 💕"
+        ];
+
+        function formatDate(date) {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const day = date.getDate();
+            let suffix = 'th';
+            if (day % 10 === 1 && day !== 11) suffix = 'st';
+            else if (day % 10 === 2 && day !== 12) suffix = 'nd';
+            else if (day % 10 === 3 && day !== 13) suffix = 'rd';
+            return `${day}${suffix} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        }
+       const mcqData = [
+            // Day 1 (13th March)
+            { 
+                q: "What is my favorite thing about you?", 
+                options: ["Your smile", "Your eyes", "Everything", "Your cooking"], 
+                correct: 2 // '2' matlab 3rd option sahi hai ("Everything")
+            },
+            
+            // Day 2 (14th March)
+            { 
+                q: "What is my favorite color on you?", 
+                options: ["Red", "Black", "Pink", "Blue"], 
+                correct: 1 // '1' matlab 2nd option sahi hai ("Black")
+            },
+            
+            // Day 3 (15th March)
+            { 
+                q: "what's the best materialistid gift you gave to me?", 
+                options: ["Cafe", "Park", "Movie Theatre", "Restaurant"], 
+                correct: 0 // '0' matlab 1st option sahi hai ("Cafe")
+            },
+            
+            // Day 4 (16th March)
+            { 
+                q: "when did we kissed for the first time? ", 
+                options: ["18th january", "13th april", "11th november", "11th june"], 
+                correct: 2 //'0' matlab 1st option sahi hai ("Cafe")
+            }, 
+
+            // Day 5 (17th March)
+            {
+                q: "Where did we met for the first time? ", 
+                options: ["Navodaya", "CC Town", "Birthday", "Garba"], 
+                correct: 3 //'0' matlab 1st option sahi hai ("Cafe")
+            },   
+
+            // Day 6 (18th March)
+            {
+                q: "When did we met at CC Town? ", 
+                options: ["13th april", "14th November", "8th september", "26th september"], 
+                correct: 1 // '1' matlab 1st option sahi hai ("14th
+
+            }, 
+            
+            // Day 7 (19th March)
+            {
+                q: "when did we saw & touched each other at garba? ", 
+                options: ["13-04-2025", "14-11-2025", "08-09-2025", "26-09-2025"], 
+                correct: 3 // '1' matlab 1st option sahi hai ("14th
+
+            },
+            
+            // Day 7 (19th March)
+            {
+                q: "the? ", 
+                options: ["13-04-2025", "14-11-2025", "08-09-2025", "26-09-2025"], 
+                correct: 3 // '1' matlab 1st option sahi hai ("14th
+
+            }  
+        ];
+        function updateMasterCountdown() {
+            const now = new Date();
+            const diff = END_DATE - now;
+            if (diff <= 0) {
+                document.getElementById('masterCountdown').textContent = "The Journey is Complete 🌸💕";
+            } else {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('masterCountdown').textContent = `⏳ ${days}d ${hours}h ${minutes}m until the Grand Finale!`;
+            }
+        }
+
+        function generateCalendar() {
+            const grid = document.getElementById('daysGrid');
+            grid.innerHTML = '';
+            const now = new Date().getTime();
+            let currentDate = new Date(START_DATE);
+            let dayIndex = 1;
+
+            while(currentDate <= END_DATE) {
+                const isUnlocked = adminMode || now >= currentDate.getTime();
+                const daysLeft = Math.round((END_DATE - currentDate) / (1000 * 60 * 60 * 24));
+                
+                let subtitle = "";
+                let isFinale = false;
+
+                if (daysLeft === 0) { subtitle = "The Final Day is Here! 🎉✨"; isFinale = true; } 
+                else { subtitle = `${daysLeft} ${phrases[dayIndex % phrases.length]}`; }
+                
+                const card = document.createElement('div');
+                card.className = 'day-card' + (isUnlocked ? '' : ' locked');
+                if(isFinale) card.classList.add('finale-card');
+
+                card.innerHTML = `
+                    <div class="day-info">
+                        <div class="day-date">${formatDate(currentDate)}</div>
+                        <div class="day-subtitle">${subtitle}</div>
+                    </div>
+                    <div class="day-icon">${isUnlocked ? (isFinale ? '✨' : '💌') : '🔒'}</div>
+                `;
+                
+                let currentDayNum = dayIndex;
+                let isFinalDay = isFinale;
+
+                if (isUnlocked) card.onclick = () => openMCQ(currentDayNum, isFinalDay);
+                
+                grid.appendChild(card);
+                currentDate.setDate(currentDate.getDate() + 1);
+                dayIndex++;
+            }
+        }
+
+        function adminOverride() {
+            if(adminMode) return;
+            const password = prompt("Admin Access:");
+            if (password === "kavmay2025") {
+                adminMode = true;
+                alert("✨ Admin Mode Activated! All days unlocked. ✨");
+                generateCalendar();
+            }
+        }
+
+        let activeDayNum = 0;
+        let activeIsFinale = false;
+
+        function openMCQ(dayNum, isFinale) {
+            activeDayNum = dayNum;
+            activeIsFinale = isFinale;
+            const data = mcqData[dayNum - 1];
+            const modal = document.getElementById('mcqModal');
+            
+            document.getElementById('mcqQuestion').textContent = data.q;
+            document.getElementById('mcqFeedback').textContent = '';
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            data.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(index, data.correct);
+                optionsContainer.appendChild(btn);
+            });
+            
+            modal.classList.add('active');
+        }
+
+        function checkAnswer(selected, correct) {
+            const feedback = document.getElementById('mcqFeedback');
+            if (selected === correct) {
+                feedback.textContent = '✅ Correct! Opening your surprise... ✨';
+                feedback.className = 'feedback correct';
+                setTimeout(() => {
+                    document.getElementById('mcqModal').classList.remove('active');
+                    if (activeIsFinale) openFinale(); else openQR(activeDayNum);
+                }, 1000);
+            } else {
+                feedback.textContent = '❌ Hehe wrong! Try again cutie 🐻‍❄️';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function openQR(dayNum) {
+            const modal = document.getElementById('qrModal');
+            document.getElementById('qrImage').innerHTML = `[QR Code for Day ${dayNum}]`; 
+            modal.classList.add('active');
+        }
+
+        function closeQRModal() { document.getElementById('qrModal').classList.remove('active'); }
+        function openFinale() { document.getElementById('finaleModal').classList.add('active'); createConfetti(); }
+        function closeFinaleModal() { document.getElementById('finaleModal').classList.remove('active'); }
+
+        function createConfetti() {
+            const colors = ['#ff69b4', '#ff1493', '#ffd1dc', '#ffdab9', '#e6e6fa', '#fff'];
+            const modal = document.getElementById('finaleModal');
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                modal.appendChild(confetti);
+            }
+        }
+
+        generateCalendar();
+        updateMasterCountdown();
+        setInterval(updateMasterCountdown, 1000);
+    </script>
+</body>
+</html>
