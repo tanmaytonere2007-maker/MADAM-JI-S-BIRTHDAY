@@ -40,6 +40,12 @@
 
         .sticker-img { width: 220px; height: 220px; margin: 15px auto 25px; display: block; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1)); border-radius: 20px; }
 
+        /* 🔥 PASSCODE STYLES 🔥 */
+        .passcode-container { margin-bottom: 20px; }
+        .passcode-input { width: 80%; padding: 12px 20px; border-radius: 25px; border: 2px solid #ffb6c1; font-family: 'Quicksand', sans-serif; font-size: 1.1rem; text-align: center; outline: none; background: rgba(255,255,255,0.9); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); transition: border-color 0.3s ease; }
+        .passcode-input:focus { border-color: #ff1493; }
+        .passcode-error { color: #ff1493; font-size: 0.95rem; font-weight: 700; margin-top: 10px; display: none; }
+
         /* Buttons */
         .btn { background: linear-gradient(135deg, #ff69b4, #ff1493); color: white; border: none; border-radius: 50px; padding: 15px 40px; font-size: 1.2rem; font-family: 'Quicksand', sans-serif; font-weight: 700; cursor: pointer; box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3); transition: all 0.3s ease; margin: 10px; position: relative; z-index: 50; }
         .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5); }
@@ -58,26 +64,17 @@
         .heart-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: rgba(255, 105, 180, 0.6); z-index: 1; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-        /* 🔥 FIXED: 3D Envelope Animation */
+        /* 3D Envelope Animation */
         .envelope-container { position: relative; width: 280px; height: 180px; margin: 40px auto 20px; cursor: pointer; perspective: 1000px; z-index: 20; animation: gentlePulse 2s infinite; }
         .envelope-container.open { animation: none; cursor: default; }
-        
         @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-
         .env-back { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: #ff8da1; border-radius: 10px; z-index: 1; box-shadow: 0 15px 25px rgba(0,0,0,0.1); }
-        
         .env-letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 150px; background: white; z-index: 2; border-radius: 8px; padding: 20px; text-align: center; display: flex; align-items: center; justify-content: center; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s; box-shadow: 0 0 15px rgba(0,0,0,0.15); }
-        
         .env-letter-text { font-family: 'Caveat', cursive; font-size: 1.8rem; color: #ff1493; line-height: 1.3; }
-
-        /* Front pocket stays AT Z-INDEX 3 so the letter stays inside it */
         .env-front { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 140px solid #ffb6c1; border-right: 140px solid #ffb6c1; border-bottom: 110px solid #ff69b4; border-top: 70px solid transparent; z-index: 3; border-radius: 0 0 10px 10px; pointer-events: none; }
-        
         .env-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 100px solid #ff1493; z-index: 4; transform-origin: top; transition: transform 0.6s ease; pointer-events: none; }
-        
-        /* Opening Animations */
         .envelope-container.open .env-flap { transform: rotateX(180deg); z-index: 0; }
-        .envelope-container.open .env-letter { transform: translateY(-90px); } /* Slides up but stays behind front pocket */
+        .envelope-container.open .env-letter { transform: translateY(-90px); }
 
         /* Calendar Styles */
         .calendar-screen { padding: 40px 20px; min-height: 100vh; }
@@ -136,7 +133,13 @@
             <h1>Something for You My gurlll 🌸</h1>
             <p>Are you ready for a little surprise?</p>
             <img src="9.gif.webp" alt="Cute Sticker" class="sticker-img">
-            <button class="btn" onclick="goToScreen(2)">Let's Go! 💌</button>
+            
+            <div class="passcode-container">
+                <input type="password" id="secretPasscode" class="passcode-input" placeholder="Enter Secret Code...">
+                <div id="passcodeError" class="passcode-error">❌ Wrong Code Cutie! Try again.</div>
+            </div>
+
+            <button class="btn" onclick="checkPasscode()">Let's Go! 💌</button>
         </div>
     </div>
 
@@ -277,6 +280,20 @@
             window.scrollTo(0, 0);
         }
 
+        // 🔥 Passcode Checker
+        function checkPasscode() {
+            const input = document.getElementById('secretPasscode').value;
+            const errorMsg = document.getElementById('passcodeError');
+            
+            if (input === 'kavmay1311') {
+                errorMsg.style.display = 'none';
+                goToScreen(2);
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('secretPasscode').value = ''; // Clear input on wrong try
+            }
+        }
+
         // Screen 2
         function runAwayButton() {
             const btn = document.getElementById('btnNo');
@@ -394,6 +411,7 @@
             else if (day % 10 === 3 && day !== 13) suffix = 'rd';
             return `${day}${suffix} ${months[date.getMonth()]} ${date.getFullYear()}`;
         }
+
        const mcqData = [
             // Day 1 (13th March)
             { 
@@ -504,8 +522,8 @@
 
             // Day 15 (27th March)
             {
-                q: "? ", 
-                options: ["", "", "", ""], 
+                q: "ummm.....our first hug? ", 
+                options: ["13th April", "11th November", "26th september", "08th september"], 
                 correct: 2 // '1' matlab 1st option sahi hai ("14th
 
             },
@@ -544,8 +562,8 @@
 
             // Day 20 (01st April)
             {
-                q: "? ", 
-                options: ["", "", "", ""], 
+                q: "What is the absolute best part of my entire day? ", 
+                options: ["Going to sleep", "Talking to you 📞", "Whenever I am with you", "Morning coffee"], 
                 correct: 2 // '1' matlab 1st option sahi hai ("14th
 
             },
@@ -560,8 +578,8 @@
 
             // Day 22 (03rd April)
             {
-                q: "? ", 
-                options: ["", "", "", ""], 
+                q: "What instantly turns my bad day into a good one? ", 
+                options: ["A text from you", "Hearing your voice", "Seeing your smile", "All of the above 🥰"], 
                 correct: 2 // '1' matlab 1st option sahi hai ("14th
 
             },
@@ -647,6 +665,7 @@
 
             }
          ];
+
         function updateMasterCountdown() {
             const now = new Date();
             const diff = END_DATE - now;
@@ -712,95 +731,6 @@
 
         let activeDayNum = 0;
         let activeIsFinale = false;
-
-        function openMCQ(dayNum, isFinale) {
-            activeDayNum = dayNum;
-            activeIsFinale = isFinale;
-            const data = mcqData[dayNum - 1];
-            const modal = document.getElementById('mcqModal');
-            
-            document.getElementById('mcqQuestion').textContent = data.q;
-            document.getElementById('mcqFeedback').textContent = '';
-            
-            const optionsContainer = document.getElementById('optionsContainer');
-            optionsContainer.innerHTML = '';
-            
-            data.options.forEach((option, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.textContent = option;
-                btn.onclick = () => checkAnswer(index, data.correct);
-                optionsContainer.appendChild(btn);
-            });
-            
-            modal.classList.add('active');
-        }
-
-        function updateMasterCountdown() {
-            const now = new Date();
-            const diff = END_DATE - now;
-            if (diff <= 0) {
-                document.getElementById('masterCountdown').textContent = "The Journey is Complete 🌸💕";
-            } else {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('masterCountdown').textContent = `⏳ ${days}d ${hours}h ${minutes}m until the Grand Finale!`;
-            }
-        }
-
-        function generateCalendar() {
-            const grid = document.getElementById('daysGrid');
-            grid.innerHTML = '';
-            const now = new Date().getTime();
-            let currentDate = new Date(START_DATE);
-            let dayIndex = 1;
-
-            while(currentDate <= END_DATE) {
-                const isUnlocked = adminMode || now >= currentDate.getTime();
-                const daysLeft = Math.round((END_DATE - currentDate) / (1000 * 60 * 60 * 24));
-                
-                let subtitle = "";
-                let isFinale = false;
-
-                if (daysLeft === 0) { subtitle = "The Final Day is Here! 🎉✨"; isFinale = true; } 
-                else { subtitle = `${daysLeft} ${phrases[dayIndex % phrases.length]}`; }
-                
-                const card = document.createElement('div');
-                card.className = 'day-card' + (isUnlocked ? '' : ' locked');
-                if(isFinale) card.classList.add('finale-card');
-
-                card.innerHTML = `
-                    <div class="day-info">
-                        <div class="day-date">${formatDate(currentDate)}</div>
-                        <div class="day-subtitle">${subtitle}</div>
-                    </div>
-                    <div class="day-icon">${isUnlocked ? (isFinale ? '✨' : '💌') : '🔒'}</div>
-                `;
-                
-                let currentDayNum = dayIndex;
-                let isFinalDay = isFinale;
-
-                if (isUnlocked) card.onclick = () => openMCQ(currentDayNum, isFinalDay);
-                
-                grid.appendChild(card);
-                currentDate.setDate(currentDate.getDate() + 1);
-                dayIndex++;
-            }
-        }
-
-        function adminOverride() {
-            if(adminMode) return;
-            const password = prompt("Admin Access:");
-            if (password === "kavmay2025") {
-                adminMode = true;
-                alert("✨ Admin Mode Activated! All days unlocked. ✨");
-                generateCalendar();
-            }
-        }
-
-        activeDayNum = 0;
-         activeIsFinale = false;
 
         function openMCQ(dayNum, isFinale) {
             activeDayNum = dayNum;
